@@ -46,28 +46,38 @@ directly before the dollar sign is assumed to represent the string's length.
 Examples
 ========
 
-This is as basic as it gets::
+This is as basic as it gets:
+
+.. code:: python
 
     >>> import netstruct
     >>> netstruct.pack(b"b$", b"Hello World!")
     b'\x0cHello World!'
 
-Alternatively::
+Alternatively:
+
+.. code:: python
 
     >>> netstruct.unpack(b"b$", b"\x0cHello World!")
     [b'Hello World!']
 
-You can get a bit more complex, if you'd like::
+You can get a bit more complex, if you'd like:
+
+.. code:: python
 
     >>> netstruct.pack(b"ih$5b", 1298, b"largeBiomes", 0, 0, 1, 0, 8)
     b'\x00\x00\x05\x12\x00\x0blargeBiomes\x00\x00\x01\x00\x08'
 
-And, of course, you can unpack complex data too::
+And, of course, you can unpack complex data too:
+
+.. code:: python
 
     >>> netstruct.unpack(b"bh$h$i", b"'\x00\x07stendec\x00\tlocalhost\x00\x00c\xdd")
     [39, b'stendec', b'localhost', 25565]
 
-You just have to be sure to use a long enough string::
+You just have to be sure to use a long enough string:
+
+.. code:: python
 
     >>> netstruct.unpack(b"bh$h$i", b"'\x00\x07stendec\x00\tlocalhost\x00")
     Traceback (most recent call last):
@@ -80,7 +90,9 @@ You just have to be sure to use a long enough string::
 
 But wait, you say. How am I supposed to provide a long enough string to
 unpack the data when I can't possibly know the length ahead of time?
-Simply put, you *can* know the length::
+Simply put, you *can* know the length:
+
+.. code:: python
 
     >>> it = netstruct.iter_unpack(b"ih$5b")
     >>> next(it)
@@ -91,7 +103,9 @@ iterator with ``next()``, or call its ``.send()`` method, it can return one of
 two values. Either it'll return the number of bytes it wants you to read next,
 or it'll return the completed object.
 
-Let's continue from above::
+Let's continue from above:
+
+.. code:: python
 
     >>> it.send(b"\x00\x00\x05\x12\x00\x0b")
     16
@@ -106,7 +120,9 @@ with it.
 
 But wait! I just sent too much data to that iterator, and now I've lost some
 of my string, haven't I? That's not a problem either. You can call the iterator
-one final time and it will return the unconsumed remainder of the data::
+one final time and it will return the unconsumed remainder of the data:
+
+.. code:: python
 
     >>> next(it)
     b'   more'
@@ -114,7 +130,9 @@ one final time and it will return the unconsumed remainder of the data::
 It's just that simple. Of course, not everyone likes iterators, even if they
 *are* quicker and less memory intensive than a class instance. NetStruct is
 prepared, with its ``Unpacker`` class and ``obj_unpack``. Let's try that last
-example one more time::
+example one more time:
+
+.. code:: python
 
     >>> obj = netstruct.obj_unpack(b"ih$5b")
     >>> obj.remaining
